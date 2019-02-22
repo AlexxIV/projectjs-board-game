@@ -24,28 +24,25 @@ export class Game {
         let target = this.isClickTargetSomething(clickCoordinates, gameState.gameBoard);
 
         if (target !== undefined) {
+
             let targetType = target.constructor.name;
             switch (targetType) {
-                case 'Knight': {
-                    this.knightHandler(target, gameState);
-                }
-                    break;
-                case 'Elf': {
-                    this.elfHandler(target, gameState);
-                }
-                    break;
+                case 'Knight':
+                case 'Elf':
                 case 'Dwarf': {
-                    this.dwarfHandler(target, gameState);
-                }
+                    if (gameState[gameState.activePlayer].units.includes(target)) {
+                        this.unitsHandler(target, gameState);
+                    }
                     break;
+                }
                 case 'Obstacle': {
-                    console.log('The only way to remove obstacle is to attack it ;)')
-                }
+                    this.obstaclesHandler(ctx, clickCoordinates, gameState, target);
                     break;
+                }
                 default: {
-                    console.log('This should be trigger unknown object');
-                }
+                    console.log('This should not be triggered, unknown object');
                     break;
+                }
             }
         } else {
             this.defaultHandler(ctx, clickCoordinates, eventCoordinates, gameState);
@@ -61,11 +58,13 @@ export class Game {
     }
 
 
-    knightHandler(target, gameState) {
-        let availableMoves = target.showAvailableMoveTiles(gameState.gameBoard);
+    unitsHandler(target, gameState) {
+        let drawingElements = target.showAvailableMoveTiles(gameState.gameBoard);
         gameState.activeUnit = target;
-        gameState.availableMoves = availableMoves;
-        Draw.drawAvailableMoves(this.ctx, availableMoves, target.getCanvasCoordinates());
+        gameState.availableMoves = drawingElements[0];
+        gameState.obstaclesInRange = drawingElements[1];
+        Draw.drawAvailableMoves(this.ctx, drawingElements[0], target.getCanvasCoordinates());
+        Draw.drawObstaclesAvailableForAttack(this.ctx, drawingElements[1]);
     }
 
     elfHandler(target, gameState) {
@@ -88,14 +87,43 @@ export class Game {
             gameState.activeUnit.coordinateX = originalEventCoordinats[0];
             gameState.activeUnit.coordinateY = originalEventCoordinats[1];
             gameState.activeUnit.calculateCurrentSquare();
-            delete gameState.availableMoves;
-            gameState.activeUnit = undefined;
-            console.log(gameState);
-        } else {
-            return;
+            this.endMove(gameState);
         }
+    }
 
+    obstaclesHandler(ctx, coordinates, gameState) {
 
+        if (gameState.obstaclesInRange.some(
+            r => r.length === coordinates.length &&
+                r.every((value, index) => coordinates[index] === value)
+        )) {
+            console.log('attack trigered on available obstacle');
+            let reDrawingCoordinates = [...coordinates];
+            reDrawingCoordinates = reDrawingCoordinates.reverse().map(x => x * 100);
+            Draw.reDrawSingleTile(ctx, reDrawingCoordinates, 'grey');
+            gameState.gameBoard[coordinates[0]][coordinates[1]] = undefined;
+            this.endMove(gameState);
+        }
+    }
+
+    endMove(gameState) {
+        const writingString = 'Active Player: ';
+        Draw.clearAllStrokes(this.ctx, gameState);
+        delete gameState.availableMoves;
+        delete gameState.obstaclesInRange;
+        gameState.activeUnit = undefined;
+        if (gameState.activePlayer === 'playerOne') {
+            gameState.activePlayer = 'playerTwo'
+        } else {
+            gameState.activePlayer = 'playerOne';
+        }
+        let playerDisplay = document.getElementById('player-display');
+        playerDisplay.innerText = writingString + this.gameState.activePlayer.charAt(0).toUpperCase() + this.gameState.activePlayer.slice(1);
+        let loader = document.getElementById('loader');
+        loader.style.display = 'block';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500);
     }
 
     isFieldEmpty(board, coordinatesToCheck) {

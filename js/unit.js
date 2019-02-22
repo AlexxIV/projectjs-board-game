@@ -1,3 +1,5 @@
+import {Obstacle} from "./obstacle.js";
+
 export default class {
     constructor(attack, defence, hp, range, ms, coordinateX, coordinateY, player, status, image) {
         this.attack = attack;
@@ -66,7 +68,9 @@ export default class {
         //     availableMoveTiles.right++;
         // }
         let availableMoveTiles = [];
+        let obstaclesArray = [];
         let obstacles = {};
+        let enemies = [];
         for (let i = 1; i <= this.ms; i++) {
             if (this.boardTile[0] - i >= 0 && obstacles.up === undefined) {
                 let coordinates = [this.boardTile[0] - i, this.boardTile[1]];
@@ -74,6 +78,7 @@ export default class {
                     availableMoveTiles.push(coordinates);
                 } else {
                     obstacles.up = 1;
+                    obstaclesArray.push(coordinates);
                 }
             }
             if (this.boardTile[0] + i <= 6 && obstacles.down === undefined) {
@@ -82,6 +87,7 @@ export default class {
                     availableMoveTiles.push(coordinates);
                 } else {
                     obstacles.down = 1;
+                    obstaclesArray.push(coordinates);
                 }
             }
             if (this.boardTile[1] - i >= 0 && obstacles.left === undefined) {
@@ -90,19 +96,21 @@ export default class {
                     availableMoveTiles.push(coordinates);
                 } else {
                     obstacles.left = 1;
+                    obstaclesArray.push(coordinates);
                 }
             }
             if (this.boardTile[1] + i <= 8 && obstacles.right === undefined) {
                 let coordinates = [this.boardTile[0], this.boardTile[1] + i];
                 if (this.isMoveAvailable(gameBoard, coordinates)) {
                     availableMoveTiles.push(coordinates);
+                } else {
+                    obstacles.right = 1;
+                    obstaclesArray.push(coordinates);
                 }
-            } else {
-                obstacles.right = 1;
             }
         }
 
-        return availableMoveTiles;
+        return [availableMoveTiles, obstaclesArray];
     }
 
     getCanvasCoordinates() {
@@ -110,6 +118,6 @@ export default class {
     }
 
     isMoveAvailable(gameBoard, coordinatesToCheck) {
-        return gameBoard[coordinatesToCheck[0]][coordinatesToCheck[1]] === undefined;
+        return !(gameBoard[coordinatesToCheck[0]][coordinatesToCheck[1]] instanceof Obstacle)
     }
 }

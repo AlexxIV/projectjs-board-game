@@ -53,7 +53,7 @@ export default class {
             gameState.gameBoard[coordinates[0]][coordinates[1]] = newUnit;
             this.toggleActivePlayer();
         }
-        if (gameState.playerOne.units.length === 1 && gameState.playerTwo.units.length === 0) {
+        if (gameState.playerOne.units.length === 2 && gameState.playerTwo.units.length === 1) {
             gameState.unitsLoading = false;
             gameState.gameStarted = true;
             this.removeElements(document.querySelectorAll('.unit-template'));
@@ -63,11 +63,14 @@ export default class {
     };
 
     toggleActivePlayer() {
+        const writingString = 'Active Player: ';
         if (this.gameState.activePlayer === 'playerOne') {
             this.gameState.activePlayer = 'playerTwo';
         } else {
             this.gameState.activePlayer = 'playerOne';
         }
+        let playerDisplay = document.getElementById('player-display');
+        playerDisplay.innerText = writingString + this.gameState.activePlayer.charAt(0).toUpperCase() + this.gameState.activePlayer.slice(1);
     }
 
     attachInitEvents() {

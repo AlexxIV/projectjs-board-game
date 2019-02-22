@@ -138,11 +138,21 @@ export default class {
         })
     }
 
+    static drawObstaclesAvailableForAttack(ctx, obstacles) {
+        obstacles.forEach(obstacle => {
+            ctx.strokeStyle = 'green';
+            ctx.lineWidth = 2;
+            let readyObstacles = [...obstacle];
+            readyObstacles = readyObstacles.reverse().map(x => x * 100);
+            ctx.strokeRect(...readyObstacles, 100, 100);
+        })
+    }
+
     static reDrawUnit(ctx, newCoordinates, gameState) {
         let oldDrawingCoordinates = [...gameState.activeUnit.boardTile];
 
         let color = '#999';
-        console.log(oldDrawingCoordinates);
+
         if (oldDrawingCoordinates[0] > 1 && oldDrawingCoordinates[0] < 5)
         {
             color = 'grey';
@@ -155,7 +165,13 @@ export default class {
         ctx.fillRect(...oldDrawingCoordinates, 100, 100);
         let drawingCoordinates = [...newCoordinates];
         drawingCoordinates = drawingCoordinates.reverse().map(x => x * 100);
+        console.log(gameState.activeUnit);
         ctx.drawImage(gameState.activeUnit.image, ...drawingCoordinates);
         this.clearAllStrokes(ctx, gameState);
+    }
+
+    static reDrawSingleTile(ctx, coordinates, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(...coordinates, 100, 100);
     }
 }
