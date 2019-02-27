@@ -1,4 +1,6 @@
 import Draw from './drawing.js';
+import {Obstacle} from "./obstacle.js";
+import Unit from './unit.js';
 
 export class Game {
     constructor(gameState, ctx, canvas) {
@@ -59,12 +61,14 @@ export class Game {
 
 
     unitsHandler(target, gameState) {
-        let drawingElements = target.showAvailableMoveTiles(gameState.gameBoard);
+        let drawingElements = this.showAvailableMoveTiles(target, gameState.gameBoard);
+        let enemiesInRange = this.showAvailableEnemies(target, gameState.gameBoard);
         gameState.activeUnit = target;
         gameState.availableMoves = drawingElements[0];
         gameState.obstaclesInRange = drawingElements[1];
         Draw.drawAvailableMoves(this.ctx, drawingElements[0], target.getCanvasCoordinates());
         Draw.drawObstaclesAvailableForAttack(this.ctx, drawingElements[1]);
+        Draw.drawEnemiesAvailableForAttack(this.ctx, enemiesInRange);
     }
 
     elfHandler(target, gameState) {
@@ -130,6 +134,124 @@ export class Game {
         // console.log(coordinatesToCheck);
         // return board[coordinatesToCheck[0]][coordinatesToCheck[1]] !== undefined;
 
+    }
+
+    showAvailableMoveTiles(target, gameBoard) {
+        // let availableMoveTiles = {
+        //     up: 0,
+        //     down: 0,
+        //     left: 0,
+        //     right: 0
+        // };
+        //
+        // while((availableMoveTiles.up < this.ms) && (this.boardTile[0] - availableMoveTiles.up > 0)) {
+        //     availableMoveTiles.up++;
+        // }
+        //
+        // while((availableMoveTiles.down < this.ms) && (this.boardTile[0] + availableMoveTiles.down < 6)) {
+        //     availableMoveTiles.down++;
+        // }
+        //
+        // while((availableMoveTiles.left < this.ms) && (this.boardTile[1] - availableMoveTiles.left > 0)) {
+        //     availableMoveTiles.left++;
+        // }
+        // while((availableMoveTiles.right < this.ms) && (this.boardTile[1] + availableMoveTiles.right < 8)) {
+        //     availableMoveTiles.right++;
+        // }
+        let availableMoveTiles = [];
+        let obstaclesArray = [];
+        let obstacles = {};
+
+        for (let i = 1; i <= target.ms; i++) {
+            if (target.boardTile[0] - i >= 0 && obstacles.up === undefined) {
+                let coordinates = [target.boardTile[0] - i, target.boardTile[1]];
+                if (this.isMoveAvailable(gameBoard, coordinates)) {
+                    availableMoveTiles.push(coordinates);
+                } else {
+                    obstacles.up = 1;
+                    obstaclesArray.push(coordinates);
+                }
+            }
+            if (target.boardTile[0] + i <= 6 && obstacles.down === undefined) {
+                let coordinates = [target.boardTile[0] + i, target.boardTile[1]];
+                if (this.isMoveAvailable(gameBoard, coordinates)) {
+                    availableMoveTiles.push(coordinates);
+                } else {
+                    obstacles.down = 1;
+                    obstaclesArray.push(coordinates);
+                }
+            }
+            if (target.boardTile[1] - i >= 0 && obstacles.left === undefined) {
+                let coordinates = [target.boardTile[0], target.boardTile[1] - i];
+                if (this.isMoveAvailable(gameBoard, coordinates)) {
+                    availableMoveTiles.push(coordinates);
+                } else {
+                    obstacles.left = 1;
+                    obstaclesArray.push(coordinates);
+                }
+            }
+            if (target.boardTile[1] + i <= 8 && obstacles.right === undefined) {
+                let coordinates = [target.boardTile[0], target.boardTile[1] + i];
+                if (this.isMoveAvailable(gameBoard, coordinates)) {
+                    availableMoveTiles.push(coordinates);
+                } else {
+                    obstacles.right = 1;
+                    obstaclesArray.push(coordinates);
+                }
+            }
+        }
+
+        return [availableMoveTiles, obstaclesArray];
+    }
+
+    showAvailableEnemies(target, gameBoard) {
+        let availableEnemies = [];
+        let enemies = {};
+        if (target.boardTile[0] - target.range >= 0 && enemies.up === undefined) {
+            let coordinates = [target.boardTile[0] - target.range, target.boardTile[1]];
+            if (this.isThereEnemy(gameBoard, coordinates)) {
+                availableEnemies.push(coordinates);
+                enemies.up = coordinates;
+            }
+        }
+        if (target.boardTile[0] + target.range <= 6 && enemies.down === undefined) {
+            let coordinates = [target.boardTile[0] + target.range, target.boardTile[1]];
+            if (this.isThereEnemy(gameBoard, coordinates)) {
+                availableEnemies.push(coordinates);
+                enemies.down = coordinates;
+            }
+        }
+
+        if (target.boardTile[1] - target.range >= 0 && enemies.left === undefined) {
+            let coordinates = [target.boardTile[0], target.boardTile[1] - target.range];
+            if (this.isThereEnemy(gameBoard, coordinates)) {
+                availableEnemies.push(coordinates);
+                enemies.left = coordinates;
+            }
+        }
+
+        if (target.boardTile[1] + target.range <= 8 && enemies.right === undefined) {
+            let coordinates = [target.boardTile[0], target.boardTile[1] + target.range];
+            if (this.isThereEnemy(gameBoard, coordinates)) {
+                availableEnemies.push(coordinates);
+                enemies.right = coordinates;
+            }
+        }
+
+        return availableEnemies;
+    }
+
+
+    isMoveAvailable(gameBoard, coordinatesToCheck) {
+        return !(gameBoard[coordinatesToCheck[0]][coordinatesToCheck[1]] instanceof Obstacle)
+    }
+
+    isThereEnemy(gameBoard, coordinatesToCheck) {
+        let target = gameBoard[coordinatesToCheck[0]][coordinatesToCheck[1]];
+        if (target !== undefined && target instanceof Unit) {
+            return !this.gameState[this.gameState.activePlayer].units.includes(target);
+        }
+        // return target instanceof this && !gameState[gameState.activePlayer].units.includes(target);
     }
 }
 

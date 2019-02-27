@@ -130,7 +130,7 @@ export default class {
 
     static drawAvailableMoves(ctx, moves, currentPositionOnCanvas) {
         moves.forEach(move => {
-            ctx.strokeStyle = 'red';
+            ctx.strokeStyle = 'green';
             ctx.lineWidth = 2;
             let readyMove = [...move];
             readyMove = readyMove.reverse().map(x => x * 100);
@@ -140,11 +140,21 @@ export default class {
 
     static drawObstaclesAvailableForAttack(ctx, obstacles) {
         obstacles.forEach(obstacle => {
-            ctx.strokeStyle = 'green';
+            ctx.strokeStyle = 'red';
             ctx.lineWidth = 2;
             let readyObstacles = [...obstacle];
             readyObstacles = readyObstacles.reverse().map(x => x * 100);
             ctx.strokeRect(...readyObstacles, 100, 100);
+        })
+    }
+
+    static drawEnemiesAvailableForAttack(ctx, enemies) {
+        enemies.forEach(enemy => {
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            let readyEnemy = [...enemy];
+            readyEnemy = readyEnemy.reverse().map(x => x * 100);
+            ctx.strokeRect(...readyEnemy, 100, 100);
         })
     }
 
