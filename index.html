@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+
+<canvas id="game-body"></canvas>
+<img class="unit-template" id="knight" draggable="true" src="images/knight.png" alt="">
+<img class="unit-template" id="elf" draggable="true" src="images/elf.png" alt="">
+<img class="unit-template" id="dwarf" draggable="true" src="images/dwarf.png" alt="">
+
+<!--<div id="game-area">-->
+
+<!--<div id="game-menu">-->
+<!--<div id="player-one">-->
+<!--<div class="player-stats">-->
+<!--<h2>Player 1</h2>-->
+<!--</div>-->
+<!--<div class="heroes">-->
+<!--<div class="elf"><img src="images/elf.png" alt=""></div>-->
+<!--<div class="dwarf"><img src="images/dwarf.png"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div id="player-two">-->
+<!--<div class="player-stats">-->
+<!--<h2>Player 2</h2>-->
+<!--</div>-->
+<!--<div class="heroes">-->
+<!--<div class="knight"><img src="images/knight.png" alt=""></div>-->
+<!--<div class="elf"><img src="images/elf.png" alt=""></div>-->
+<!--<div class="dwarf"><img src="images/dwarf.png"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<div id="loader">
+    <div class="move-helper">
+        <h2 id="move-description"></h2>
+    </div>
+    <div class="hourglassBackground">
+        <div class="hourglassContainer">
+            <div class="hourglassCurves"></div>
+            <div class="hourglassCapTop"></div>
+            <div class="hourglassGlassTop"></div>
+            <div class="hourglassSand"></div>
+            <div class="hourglassSandStream"></div>
+            <div class="hourglassCapBottom"></div>
+            <div class="hourglassGlass"></div>
+        </div>
+    </div>
+</div>
+<h2 id="player-display">Active Player: PlayerOne</h2>
+<div id="game-over">
+    <div class="wrapper">
+        <h2 id="winner"></h2>
+        <h2 id="score"></h2>
+        <h2 id="rounds"></h2>
+        <button type="button" id="restart">Restart Game</button>
+    </div>
+</div>
+<script type="module" src="js/base.js"></script>
+</body>
+</html>
