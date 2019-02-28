@@ -53,7 +53,7 @@ export default class {
             gameState.gameBoard[coordinates[0]][coordinates[1]] = newUnit;
             this.toggleActivePlayer();
         }
-        if (gameState.playerOne.units.length === 1 && gameState.playerTwo.units.length === 1) {
+        if (gameState.playerOne.units.length === 6 && gameState.playerTwo.units.length === 6) {
             gameState.unitsLoading = false;
             gameState.gameStarted = true;
             this.removeElements(document.querySelectorAll('.unit-template'));
