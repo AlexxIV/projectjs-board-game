@@ -12,11 +12,7 @@
 <img class="unit-template" id="knight" draggable="true" src="images/knight.png" alt="">
 <img class="unit-template" id="elf" draggable="true" src="images/elf.png" alt="">
 <img class="unit-template" id="dwarf" draggable="true" src="images/dwarf.png" alt="">
-<div id="menu" style="float: right">
-    <button type="button" id="attack">Attack</button>
-    <button type="button" id="move">Move</button>
-    <button type="button" id="heal">Heal</button>
-</div>
+
 <!--<div id="game-area">-->
 
 <!--<div id="game-menu">-->
@@ -42,6 +38,9 @@
 <!--</div>-->
 <!--</div>-->
 <div id="loader">
+    <div class="move-helper">
+        <h2 id="move-description"></h2>
+    </div>
     <div class="hourglassBackground">
         <div class="hourglassContainer">
             <div class="hourglassCurves"></div>
@@ -55,6 +54,14 @@
     </div>
 </div>
 <h2 id="player-display">Active Player: PlayerOne</h2>
+<div id="game-over">
+    <div class="wrapper">
+        <h2 id="winner"></h2>
+        <h2 id="score"></h2>
+        <h2 id="rounds"></h2>
+        <button type="button" id="restart">Restart Game</button>
+    </div>
+</div>
 <script type="module" src="js/base.js"></script>
 </body>
 </html>

@@ -53,6 +53,52 @@ img {
     background: rgba(128, 128, 128, 0.8);
 }
 
+#move-description {
+    font-size: 80px;
+    color: red;
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#game-over {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.8);
+}
+.wrapper {
+    width: 100%;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+#winner,
+#score,
+#rounds {
+    font-size: 80px;
+    color: red;
+    text-align: center;
+}
+
+#restart {
+    padding: 10px 20px;
+    font-size: 30px;
+    border-radius: 10px;
+    background: red;
+    color: white;
+    z-index: 9999;
+    border: none;
+    cursor: pointer;
+}
 
 .hourglassBackground {
     position: absolute;

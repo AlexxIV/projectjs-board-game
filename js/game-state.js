@@ -10,14 +10,21 @@ export default class {
         this.currentAction = '';
         this.actions = ['attack', 'move', 'heal'];
         this.playerOne = {
-            units: []
+            units: [],
+            points: 0,
+            deadUnits: [],
+            killedUnits: []
         };
         this.playerTwo = {
-            units: []
+            units: [],
+            points: 0,
+            deadUnits: [],
+            killedUnits: []
         };
         this.unitsLoading = true;
         this.gameBoard = this.createBoardTiles(width, height, ratio);
         this.obstacles = [];
+        this.round = 0;
     }
 
     createBoardTiles(width, height, ratio) {

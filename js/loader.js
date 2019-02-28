@@ -53,7 +53,7 @@ export default class {
             gameState.gameBoard[coordinates[0]][coordinates[1]] = newUnit;
             this.toggleActivePlayer();
         }
-        if (gameState.playerOne.units.length === 2 && gameState.playerTwo.units.length === 1) {
+        if (gameState.playerOne.units.length === 1 && gameState.playerTwo.units.length === 1) {
             gameState.unitsLoading = false;
             gameState.gameStarted = true;
             this.removeElements(document.querySelectorAll('.unit-template'));
@@ -86,6 +86,9 @@ export default class {
                 this.startDrag(e);
             });
         });
+        document.getElementById('restart').addEventListener('click', (e) => {
+            location.reload();
+        })
     }
 
     startGame(gameState, ctx, canvas) {
